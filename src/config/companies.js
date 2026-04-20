@@ -10,4 +10,5 @@ export const config_365solar = {
   website: "https://365solar.com.au",
   reviewThreshold: 4,
   webhookUrl: "YOUR_WEBHOOK_URL_HERE",
+  favicon: "/fav/356solar.png",
 }

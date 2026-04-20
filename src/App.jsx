@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Toaster } from 'sonner'
 import { getCompanyConfig } from './config'
 import { ReviewFlow } from './components/review/ReviewFlow'
@@ -26,6 +26,18 @@ function App() {
       userEmail: params.get('e') || '',
     }
   }, [])
+
+  useEffect(() => {
+    if (config?.favicon) {
+      let link = document.querySelector("link[rel~='icon']")
+      if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.head.appendChild(link)
+      }
+      link.href = config.favicon
+    }
+  }, [config])
 
   return (
     <>
