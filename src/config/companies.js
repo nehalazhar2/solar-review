@@ -1,3 +1,24 @@
+export const DEFAULT_POSITIVE_CATEGORIES = [
+  "Product Knowledge & Advice",
+  "Communication",
+  "Installation Quality",
+  "Timeliness & Logistics",
+  "Pricing & Value",
+  "Cleanliness & Respect",
+  "After-Sales Support",
+]
+
+export const DEFAULT_IMPROVEMENT_CATEGORIES = [
+  "Product Knowledge & Advice",
+  "Communication",
+  "Installation Quality",
+  "Timeliness & Logistics",
+  "Pricing & Value",
+  "Cleanliness & Respect",
+  "After-Sales Support",
+]
+
+
 export const config_365solar = {
   id: "365solar",
   name: "365 Solar",

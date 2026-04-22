@@ -36,7 +36,27 @@ function SolarRays({ primaryColor }) {
   )
 }
 
-export function ReviewShell({ companyConfig, headline, children }) {
+function StepIndicator({ step, totalSteps, primaryColor }) {
+  if (!step || !totalSteps) return null
+  return (
+    <div style={{ display: "flex", gap: "8px", alignItems: "center", justifyContent: "center", marginBottom: "4px" }}>
+      {Array.from({ length: totalSteps }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            width: i + 1 === step ? "24px" : "8px",
+            height: "8px",
+            borderRadius: "100px",
+            backgroundColor: i + 1 <= step ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)",
+            transition: "all 300ms ease",
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export function ReviewShell({ companyConfig, headline, children, step, totalSteps }) {
   return (
     <div
       style={{
@@ -47,7 +67,7 @@ export function ReviewShell({ companyConfig, headline, children }) {
         overflow: "hidden",
       }}
     >
-      {/* Hero zone — 38vh */}
+      {/* Hero zone */}
       <div
         style={{
           height: "38vh",
@@ -63,7 +83,7 @@ export function ReviewShell({ companyConfig, headline, children }) {
       >
         <SolarRays primaryColor={companyConfig.primaryColor} />
 
-        <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+        <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}>
           <div
             style={{
               borderRadius: "50%",
@@ -83,6 +103,9 @@ export function ReviewShell({ companyConfig, headline, children }) {
               style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }}
             />
           </div>
+
+          <StepIndicator step={step} totalSteps={totalSteps} primaryColor={companyConfig.primaryColor} />
+
           <p
             style={{
               color: "rgba(255,255,255,0.9)",
@@ -109,7 +132,7 @@ export function ReviewShell({ companyConfig, headline, children }) {
         </svg>
       </div>
 
-      {/* Content zone — fills remaining */}
+      {/* Content zone */}
       <div
         style={{
           flex: 1,

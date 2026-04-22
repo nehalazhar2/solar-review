@@ -1,11 +1,15 @@
 import { useState, useRef, useEffect } from "react"
 import { StarRating } from "./StarRating"
-import { InternalReview } from "./InternalReview"
+import { FeedbackCategories } from "./FeedbackCategories"
+import { FeedbackComment } from "./FeedbackComment"
+import { GoogleReview } from "./GoogleReview"
 import { ThankYou } from "./ThankYou"
 
 export function ReviewFlow({ companyConfig, userName, userEmail }) {
   const [screen, setScreen] = useState("rating")
   const [rating, setRating] = useState(0)
+  const [selectedAreas, setSelectedAreas] = useState([])
+  const [feedback, setFeedback] = useState("")
   const [name, setName] = useState(userName)
   const [wasPositive, setWasPositive] = useState(false)
   const [visible, setVisible] = useState(true)
@@ -27,6 +31,8 @@ export function ReviewFlow({ companyConfig, userName, userEmail }) {
     }
   }, [companyConfig])
 
+  const isPositive = rating >= companyConfig.reviewThreshold
+
   const transition = (nextScreen, opts = {}) => {
     setVisible(false)
     timeoutRef.current = setTimeout(() => {
@@ -39,13 +45,31 @@ export function ReviewFlow({ companyConfig, userName, userEmail }) {
 
   const handleRatingNext = (selectedRating) => {
     setRating(selectedRating)
-    if (selectedRating >= companyConfig.reviewThreshold) {
-      window.open(companyConfig.googleReviewsUrl, "_blank", "noopener,noreferrer")
-      transition("thanks", { name: userName, wasPositive: true })
+    setWasPositive(selectedRating >= companyConfig.reviewThreshold)
+    transition("categories")
+  }
+
+  const handleCategoriesNext = (areas) => {
+    setSelectedAreas(areas)
+    if (isPositive) {
+      transition("google", { wasPositive: true })
     } else {
-      transition("internal")
+      transition("comment")
     }
   }
+
+  const handleCommentDone = ({ feedback: fb, name: n }) => {
+    setFeedback(fb)
+    setName(n)
+    transition("thanks", { name: n, wasPositive: false })
+  }
+
+  const totalSteps = 3
+  const currentStep =
+    screen === "rating" ? 1 :
+    screen === "categories" ? 2 :
+    screen === "comment" ? 3 :
+    screen === "google" ? 3 : null
 
   return (
     <div
@@ -60,18 +84,43 @@ export function ReviewFlow({ companyConfig, userName, userEmail }) {
           companyConfig={companyConfig}
           userName={userName}
           onNext={handleRatingNext}
+          step={currentStep}
+          totalSteps={totalSteps}
         />
       )}
-      {screen === "internal" && (
-        <InternalReview
+      {screen === "categories" && (
+        <FeedbackCategories
+          companyConfig={companyConfig}
+          isPositive={isPositive}
+          onNext={handleCategoriesNext}
+          onBack={() => transition("rating")}
+          step={currentStep}
+          totalSteps={totalSteps}
+        />
+      )}
+      {screen === "comment" && (
+        <FeedbackComment
           companyConfig={companyConfig}
           rating={rating}
+          selectedAreas={selectedAreas}
+          isPositive={isPositive}
           userName={userName}
           userEmail={userEmail}
-          onBack={() => transition("rating")}
-          onDone={(submittedName) =>
-            transition("thanks", { name: submittedName || "", wasPositive: false })
-          }
+          onBack={() => transition("categories")}
+          onDone={handleCommentDone}
+          step={currentStep}
+          totalSteps={totalSteps}
+        />
+      )}
+      {screen === "google" && (
+        <GoogleReview
+          companyConfig={companyConfig}
+          rating={rating}
+          selectedAreas={selectedAreas}
+          feedback={feedback}
+          onDone={() => transition("thanks", { name, wasPositive: true })}
+          step={currentStep}
+          totalSteps={totalSteps}
         />
       )}
       {screen === "thanks" && (
