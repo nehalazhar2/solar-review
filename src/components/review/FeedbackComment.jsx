@@ -7,11 +7,14 @@ import { ReviewShell } from "./ReviewShell"
 const MAX_CHARS = 500
 
 async function submitReview({ webhookUrl, payload }) {
+  const body = new URLSearchParams()
+  for (const [key, value] of Object.entries(payload)) {
+    body.append(key, typeof value === "string" ? value : JSON.stringify(value))
+  }
   await fetch(webhookUrl, {
     method: "POST",
     mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body,
   })
   return payload
 }
