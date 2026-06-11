@@ -5,7 +5,7 @@ import { FeedbackComment } from "./FeedbackComment"
 import { GoogleReview } from "./GoogleReview"
 import { ThankYou } from "./ThankYou"
 
-export function ReviewFlow({ companyConfig, userName, userEmail }) {
+export function ReviewFlow({ companyConfig, userName, userEmail, dealId }) {
   const [screen, setScreen] = useState("rating")
   const [rating, setRating] = useState(0)
   const [selectedAreas, setSelectedAreas] = useState([])
@@ -106,6 +106,7 @@ export function ReviewFlow({ companyConfig, userName, userEmail }) {
           isPositive={isPositive}
           userName={userName}
           userEmail={userEmail}
+          dealId={dealId}
           onBack={() => transition("categories")}
           onDone={handleCommentDone}
           step={currentStep}

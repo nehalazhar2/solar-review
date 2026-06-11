@@ -30,6 +30,6 @@ export const config_365solar = {
   phone: "1300 365 765",
   website: "https://365solar.com.au",
   reviewThreshold: 4,
-  webhookUrl: "YOUR_WEBHOOK_URL_HERE",
+  webhookUrl: "https://flow.zoho.com.au/7005823522/flow/webhook/incoming?zapikey=1001.58dd079d4699cedf23178dda6de90ea7.e1271d49f7f0bfb3dd962775ce4cbbe0&isdebug=false",
   favicon: "/fav/356solar.png",
 }

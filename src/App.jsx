@@ -17,13 +17,14 @@ function NotFound() {
 }
 
 function App() {
-  const { config, userName, userEmail } = useMemo(() => {
+  const { config, userName, userEmail, dealId } = useMemo(() => {
     const params = new URLSearchParams(window.location.search)
     const token = params.get('t')
     return {
       config: token ? getCompanyConfig(token) : null,
       userName: params.get('n') || '',
       userEmail: params.get('e') || '',
+      dealId: params.get('deal_id') || '',
     }
   }, [])
 
@@ -43,7 +44,7 @@ function App() {
     <>
       <Toaster position="top-center" richColors />
       {config ? (
-        <ReviewFlow companyConfig={config} userName={userName} userEmail={userEmail} />
+        <ReviewFlow companyConfig={config} userName={userName} userEmail={userEmail} dealId={dealId} />
       ) : (
         <NotFound />
       )}

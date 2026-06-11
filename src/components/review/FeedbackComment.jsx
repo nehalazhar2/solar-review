@@ -16,7 +16,7 @@ async function submitReview({ webhookUrl, payload }) {
   return payload
 }
 
-export function FeedbackComment({ companyConfig, rating, selectedAreas, isPositive, userName, userEmail, onBack, onDone, step, totalSteps }) {
+export function FeedbackComment({ companyConfig, rating, selectedAreas, isPositive, userName, userEmail, dealId, onBack, onDone, step, totalSteps }) {
   const [feedback, setFeedback] = useState("")
   const [name, setName] = useState(userName || "")
   const textareaRef = useRef(null)
@@ -43,6 +43,7 @@ export function FeedbackComment({ companyConfig, rating, selectedAreas, isPositi
     const payload = {
       name: name.trim() || "Anonymous",
       email: userEmail || "",
+      deal_id: dealId || "",
       rating,
       selectedAreas,
       feedback: feedback.trim(),
